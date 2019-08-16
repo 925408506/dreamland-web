@@ -1,0 +1,3 @@
+[INFO][main][2019-08-16 10:57:41][wang.dreamland.www.mail.SendEmail] - Send Email Exception:535 Error: authentication failed
+
+[INFO][main][2019-08-16 10:58:24][wang.dreamland.www.mail.SendEmail] - send validateCode to 925408506@qq.com

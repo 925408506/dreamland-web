@@ -15,13 +15,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Override
     @Transactional
     public int regist(User user) {
         int i = userMapper.insert(user);
-        i = i / 0;
         return i;
     }
 
+    @Override
     public User login(String name, String password) {
         User user = new User();
         user.setEmail( name );
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
         //return userMapper.findUserByNameAndPwd( name,password );
     }
 
+    @Override
     public User findByEmail(String email) {
         User user = new User();
         user.setEmail( email );
@@ -70,6 +72,7 @@ public class UserServiceImpl implements UserService {
         user.setId( id );
         return userMapper.selectOne( user );
     }
+    @Override
     @Transactional
     public void deleteByEmail(String email) {
         User user = new User();
@@ -82,6 +85,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail( email );
         userMapper.delete( user );
     }
+    @Override
     @Transactional
     public void update(User user) {
         userMapper.updateByPrimaryKeySelective( user );

@@ -49,7 +49,10 @@ public class CodeCaptchaServlet extends HttpServlet {
         int intCount=0; 
         intCount=(new Random()).nextInt(9999);// 
 
-        if(intCount <1000)intCount+=1000; 
+        if(intCount <1000)
+        {
+            intCount+=1000;
+        }
         String rand=intCount+"";
         //将认证码显示到图象中
         g.setColor(Color.black);
