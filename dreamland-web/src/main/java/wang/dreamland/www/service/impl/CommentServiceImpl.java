@@ -19,40 +19,40 @@ public class CommentServiceImpl implements CommentService {
     private CommentMapper commentMapper;
 
 
+    @Override
     public int add(Comment comment) {
-        return commentMapper.insert(comment);
+        return commentMapper.insertComment(comment);
     }
 
+    @Override
     public void update(Comment comment) {
         commentMapper.updateByPrimaryKey( comment );
     }
 
+    @Override
     public List<Comment> findAll(Long cid) {
-        Comment comment = new Comment();
-        comment.setConId(cid);
-        return commentMapper.select(comment);
+        return commentMapper.selectAll(cid);
     }
 
+    @Override
     public Comment findById(Long id) {
         Comment comment = new Comment();
         comment.setId( id );
         return commentMapper.selectOne( comment );
     }
 
+    @Override
     public List<Comment> findAllFirstComment(Long cid)
     {
-        Comment comment = new Comment();
-        comment.setConId(cid);
-        return commentMapper.select(comment);
+        return commentMapper.findAllFirstComment(cid);
     }
 
+    @Override
     public List<Comment> findAllChildrenComment(Long cid, String children) {
-        Comment comment = new Comment();
-        comment.setConId(cid);
-        comment.setChildren(children);
-        return commentMapper.select(comment);
+        return commentMapper.findAllChildrenComment(cid,children);
     }
 
+    @Override
     public void deleteById(Long id) {
         Comment c = new Comment();
         c.setId( id );
@@ -60,6 +60,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    @Override
     public void deleteChildrenComment(String children) {
         Example example = new Example( Comment.class );
         Example.Criteria criteria = example.createCriteria();

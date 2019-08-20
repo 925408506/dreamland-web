@@ -19,6 +19,7 @@ import java.util.Properties;
 
 /**
  * Mybatis+Mysql 分页工具类
+ * @author Talent
  */
 @Intercepts({
 		@Signature(type = StatementHandler.class, method = "prepare", args = {
@@ -52,7 +53,7 @@ public class PageHelper implements Interceptor {
 		return page;
 	}
 
-	//@Override
+	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		if (localPage.get() == null) {
 			return invocation.proceed();
@@ -119,7 +120,7 @@ public class PageHelper implements Interceptor {
 	 * @param target
 	 * @return
 	 */
-	//@Override
+	@Override
 	public Object plugin(Object target) {
 		if (target instanceof StatementHandler
 				|| target instanceof ResultSetHandler) {
@@ -129,7 +130,7 @@ public class PageHelper implements Interceptor {
 		}
 	}
 
-	//@Override
+	@Override
 	public void setProperties(Properties properties) {
 
 	}
@@ -195,7 +196,9 @@ public class PageHelper implements Interceptor {
 		} finally {
 			try {
 				if (rs != null)
+				{
 					rs.close();
+				}
 			} catch (SQLException e) {
 				logger.error("Ignore this exception", e);
 			}

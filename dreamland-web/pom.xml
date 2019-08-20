@@ -348,6 +348,17 @@
             <version>1.4.7</version>
         </dependency>
 
+        <!-- 阿里大于依赖 -->
+        <dependency>
+            <groupId>wang.dreamland.www</groupId>
+            <artifactId>dayu-sdk-core</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>wang.dreamland.www</groupId>
+            <artifactId>dayu-sdk-dysmsapi</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
