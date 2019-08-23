@@ -73,4 +73,9 @@ public class CommentServiceImpl implements CommentService {
         commentMapper.deleteByExample(example);
     }
 
+    @Override
+    public int deleteByContentId(Long cid) {
+        return commentMapper.deleteByContentId(cid);
+    }
+
 }

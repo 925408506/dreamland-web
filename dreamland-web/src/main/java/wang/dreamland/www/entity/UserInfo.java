@@ -1,8 +1,12 @@
 package wang.dreamland.www.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import wang.dreamland.www.common.DateUtils;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Date;
 
 public class UserInfo {
@@ -77,4 +81,11 @@ public class UserInfo {
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
     }
+
+    @Transient
+    public String getFormatDate(){
+        return DateUtils.formatDate(getBirthday(),"yyyy-MM-dd");
+    }
+
+
 }

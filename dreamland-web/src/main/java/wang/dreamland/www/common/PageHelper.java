@@ -244,7 +244,62 @@ public class PageHelper implements Interceptor {
 		private long total;
 		private int pages;
 		private List<E> result;
+		/**
+		 * //开始页码（按钮上的数字）
+		 */
+		private int startPage;
+		/**
+		 * //结束页码（按钮上的数字）
+		 */
+		private int endPage;
 
+		public int getStartPage() {
+			return startPage;
+		}
+
+		public void setStartPage(int startPage) {
+			this.startPage = startPage;
+		}
+
+		public int getEndPage() {
+			return endPage;
+		}
+
+		public void setEndPage(int endPage) {
+			this.endPage = endPage;
+		}
+		public void setTotal(long total) {
+			//计算总页码数：
+			int totalCount = Integer.parseInt(total+"");
+			pages=(totalCount+pageSize-1)/pageSize;
+			//计算页面的页码中“显示”的起始页码和结束页码
+			//一般显示的页码较好的效果是最多显示10个页码
+			//算法是前5后4，不足补10
+			//计算显示的起始页码（根据当前页码计算）：当前页码-5
+			startPage = pageNum - 5;
+			if(startPage < 1){
+				//页码修复
+				startPage = 1;
+			}
+
+			//计算显示的结束页码（根据开始页码计算）：开始页码+9
+			endPage = startPage + 9;
+			//页码修复
+			if(endPage > pages){
+				endPage = pages;
+			}
+
+			//起始页面重新计算（根据结束页码计算）：结束页码-9
+			startPage = endPage - 9;
+			if(startPage < 1){
+				//页码修复
+				startPage = 1;
+			}
+
+			System.out.println(startPage +"和" +endPage);
+
+			this.total = total;
+		}
 		public Page(Integer pageNum, Integer pageSize) {
 			if (pageNum == null || pageNum < 1) {
 				pageNum = 1;
@@ -314,10 +369,6 @@ public class PageHelper implements Interceptor {
 
 		public long getTotal() {
 			return total;
-		}
-
-		public void setTotal(long total) {
-			this.total = total;
 		}
 
 		@Override

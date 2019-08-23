@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="wang.dreamland.www.dao.UpvoteMapper" >
+  <resultMap id="BaseResultMap" type="wang.dreamland.www.entity.Upvote" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="u_id" property="uId" jdbcType="BIGINT" />
+    <result column="content_id" property="contentId" jdbcType="BIGINT" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="upvote" property="upvote" jdbcType="VARCHAR" />
+    <result column="downvote" property="downvote" jdbcType="VARCHAR" />
+    <result column="upvote_time" property="upvoteTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, u_id, content_id, ip, upvote, downvote, upvote_time
+  </sql>
+
+  <delete id="deleteByContentId" parameterType="java.lang.Long" >
+    delete from upvote
+    where content_id = #{cid}
+  </delete>
+
+</mapper>

@@ -69,6 +69,10 @@ public class BaseController {
         Page<UserContent> page = userContentService.findAll( content,pageNum ,pageSize);
         return page;
     }
+    public Page<UserContent> findAll(Integer pageNum, Integer pageSize){
+        Page<UserContent> page = userContentService.findAll(pageNum ,pageSize);
+        return page;
+    }
 
     public Page<UserContent> findAll(UserContent content, Comment comment, Integer pageNum, Integer pageSize){
         Page<UserContent> page = userContentService.findAll( content,comment,pageNum ,pageSize);

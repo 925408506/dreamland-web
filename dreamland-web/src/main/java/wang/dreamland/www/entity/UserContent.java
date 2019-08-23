@@ -1,8 +1,12 @@
 package wang.dreamland.www.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import wang.dreamland.www.common.DateUtils;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Date;
 
 public class UserContent {
@@ -17,7 +21,7 @@ public class UserContent {
     private String category;
 
     private String personal;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date rptTime;
 
     private String imgUrl;
@@ -31,6 +35,17 @@ public class UserContent {
     private Integer commentNum;
 
     private String content;
+
+    @Transient
+    private  Integer num;
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
     public Long getId() {
         return id;
@@ -77,6 +92,7 @@ public class UserContent {
     }
 
     public void setRptTime(Date rptTime) {
+
         this.rptTime = rptTime;
     }
 
@@ -126,5 +142,9 @@ public class UserContent {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+    @Transient
+    public String getFormatDate(){
+        return DateUtils.formatDate(getRptTime(),"yyyy-MM-dd HH:mm:ss");
     }
 }

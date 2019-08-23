@@ -3,7 +3,7 @@ package wang.dreamland.www.service;
 import wang.dreamland.www.entity.Upvote;
 
 /**
- * Created by 12903 on 2018/4/16.
+ *
  */
 public interface UpvoteService {
     /**
@@ -32,4 +32,6 @@ public interface UpvoteService {
      * @param upvote
      */
    void update(Upvote upvote);
+
+    int deleteByContentId(Long cid);
 }

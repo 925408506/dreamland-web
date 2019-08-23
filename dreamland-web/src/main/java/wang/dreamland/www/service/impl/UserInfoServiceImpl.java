@@ -15,16 +15,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserInfoMapper userInfoMapper;
 
 
+    @Override
     public UserInfo findByUid(Long id) {
         UserInfo userInfo = new UserInfo();
         userInfo.setuId(id);
         return userInfoMapper.selectOne(userInfo);
     }
 
+    @Override
     public void update(UserInfo userInfo) {
         userInfoMapper.updateByPrimaryKey(userInfo);
     }
 
+    @Override
     public void add(UserInfo userInfo) {
         userInfoMapper.insert(userInfo);
     }

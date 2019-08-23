@@ -1,6 +1,7 @@
 package wang.dreamland.www.interceptor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import tk.mybatis.mapper.entity.Example;
 import wang.dreamland.www.common.PageHelper;
 import wang.dreamland.www.dao.UserContentMapper;
 import wang.dreamland.www.entity.UserContent;
@@ -26,7 +27,7 @@ public class IndexJspFilter implements Filter{
         UserContentMapper userContentMapper = ctx.getBean(UserContentMapper.class);
         //开始分页
         PageHelper.startPage(null, null);
-        List<UserContent> list =  userContentMapper.select( null );
+        List<UserContent> list =  userContentMapper.findByJoin( null );
         //分页结束
         PageHelper.Page endPage = PageHelper.endPage();
         request.setAttribute("page", endPage );

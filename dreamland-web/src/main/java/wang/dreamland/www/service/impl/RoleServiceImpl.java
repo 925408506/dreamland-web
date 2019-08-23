@@ -14,6 +14,7 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMapper roleMapper;
 
+    @Override
     public Role findById(long id) {
         Role role = new Role();
         role.setId( id );

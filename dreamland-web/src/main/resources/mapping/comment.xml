@@ -115,4 +115,9 @@
       <result column="enable" property="enable" />
     </association>
   </resultMap>
+
+  <delete id="deleteByContentId" parameterType="java.lang.Long" >
+    delete from comment
+    where con_id = #{cid}
+  </delete>
 </mapper>

@@ -1,5 +1,6 @@
 package wang.dreamland.www.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -24,7 +25,7 @@ public class UserContentServiceImpl implements UserContentService {
     private CommentMapper commentMapper;
     @Override
     public void addContent(UserContent content) {
-        userContentMapper.insert( content );
+        userContentMapper.insertContent( content );
     }
 
     @Override
@@ -41,15 +42,25 @@ public class UserContentServiceImpl implements UserContentService {
     }
 
     @Override
+    public Page<UserContent> findAll(Integer pageNum, Integer pageSize) {
+        //分页查询
+        //开始分页
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserContent> list =  userContentMapper.findByJoin(null);
+        //分页结束
+        Page endPage = PageHelper.endPage();
+        return endPage;
+    }
+
+    @Override
     public Page<UserContent> findAll(UserContent content, Integer pageNum, Integer pageSize) {
         //分页查询
         System.out.println("第"+pageNum+"页");
         System.out.println("每页显示："+pageSize+"条");
         //开始分页
         PageHelper.startPage(pageNum, pageSize);
-        List<UserContent> list =  userContentMapper.select( content );
-        //List<UserContent> list = userContentMapper.findAllContent();
-        Page endPage = PageHelper.endPage();//分页结束
+        List<UserContent> list =  userContentMapper.findByJoin( content );
+        Page endPage = PageHelper.endPage();
         List<UserContent> result = endPage.getResult();
         return endPage;
     }
@@ -83,16 +94,63 @@ public class UserContentServiceImpl implements UserContentService {
     }
 
     @Override
+    public void deleteById(Long cid) {
+        userContentMapper.deleteByPrimaryKey(cid);
+    }
+
+    @Override
     public UserContent findById(long id) {
         UserContent userContent = new UserContent();
         userContent.setId( id );
-        return userContentMapper.selectOne( userContent );
+        List<UserContent> list  = userContentMapper.findByJoin( userContent );
+        if(list != null && list.size() > 0)
+        {
+            return list.get(0);
+        }else
+        {
+            return  null;
+        }
     }
 
     @Override
     public void updateById(UserContent content) {
         userContentMapper.updateByPrimaryKeySelective( content );
     }
+
+    @Override
+    public List <UserContent> findCategoryByUid(Long uid) {
+        return userContentMapper.findCategoryByUid(uid);
+    }
+
+    @Override
+    public Page<UserContent> findByCategory(String category,Long uid,Integer pageNum, Integer pageSize) {
+        UserContent userContent = new UserContent();
+        if(StringUtils.isNotBlank(category) && !"null".equals(category)){
+            userContent.setCategory(category);
+        }
+        userContent.setuId(uid);
+        userContent.setPersonal("0");
+        //开始分页
+        PageHelper.startPage(pageNum, pageSize);
+        userContentMapper.select(userContent);
+        //分页结束
+        Page endPage = PageHelper.endPage();
+        return endPage;
+    }
+
+    @Override
+    public Page<UserContent> findPersonal(Long uid, Integer pageNum, Integer pageSize) {
+        UserContent userContent = new UserContent();
+        userContent.setuId(uid);
+        userContent.setPersonal("1");
+        //开始分页
+        PageHelper.startPage(pageNum, pageSize);
+        userContentMapper.select(userContent);
+        //分页结束
+        Page endPage = PageHelper.endPage();
+        return endPage;
+    }
+
 
 
 }

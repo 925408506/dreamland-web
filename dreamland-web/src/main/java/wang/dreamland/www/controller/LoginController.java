@@ -84,7 +84,7 @@ public class LoginController extends BaseController {
                 getSession().setAttribute("user", user);
                 model.addAttribute("user", user);
                 log.info("手机快捷登录成功");
-                return "/personal/personal";
+                return "/list";
 
             }else {
                 //验证码错误或过期
@@ -119,7 +119,7 @@ public class LoginController extends BaseController {
             log.info("用户登录登录成功");
             getSession().setAttribute("user", user);
             model.addAttribute("user", user);
-            return "/personal/personal";
+            return "redirect:/list";
         } else {
             log.info("用户登录登录失败");
             model.addAttribute("email", email);
@@ -155,8 +155,8 @@ public class LoginController extends BaseController {
         Map map = new HashMap<String,Object>();
         try { //  发送验证码操作
             final String code = RandStringUtils.getCode();
-            // 60秒 有效 redis保存验证码
-            redisTemplate.opsForValue().set(telephone, code, 1, TimeUnit.HOURS);
+            // 5分钟 有效 redis保存验证码
+            redisTemplate.opsForValue().set(telephone, code, 5, TimeUnit.MINUTES);
             log.debug("--------短信验证码为："+code);
             // 调用ActiveMQ jmsTemplate，发送一条消息给MQ
             jmsTemplate.send("login_msg", new MessageCreator() {
@@ -178,7 +178,7 @@ public class LoginController extends BaseController {
 
     }
 
-    @RequestMapping("/logingout")
+    @RequestMapping("/loginout")
     public String exit (Model model){
         log.info("------退出登录------");
         getSession().removeAttribute("user");

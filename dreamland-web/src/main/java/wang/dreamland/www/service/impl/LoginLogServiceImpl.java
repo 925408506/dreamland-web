@@ -25,6 +25,7 @@ public class LoginLogServiceImpl implements LoginLogService {
     private LoginLogMapper loginLogMapper;
 
 
+    @Override
     public int add(LoginLog loginLog) {
         return loginLogMapper.insert( loginLog );
     }

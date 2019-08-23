@@ -164,7 +164,7 @@
                 <li><a href="#">最热梦</a></li>
                 <li><a href="#">梦诗词</a></li>
                 <li><a href="#">梦问答</a></li>
-                <li><a href="#">我的梦</a></li>
+                <li><a href="/watch">我的梦</a></li>
                 <li><a href="${ctx}/list?id=${user.id}">个人空间</a></li>
             </ul>
         </div>
@@ -195,9 +195,14 @@
                                 </a>
                             </div>
                             <a href="#" target="_blank">
-                                <h2 class="author-h2">
-                                        ${cont.nickName}
-                                </h2>
+                                <div class="author-h2">
+                                    <div style="float: left;font-size: 15px;color: #9b8878">
+                                            ${cont.nickName}
+                                    </div>
+                                    <div style="float: left;margin-left: 10px;color: grey;margin-top: 2px;font-size: 12px">
+                                            ${cont.getFormatDate()}
+                                    </div>
+                                </div>
                             </a>
                         </div>
 
@@ -280,7 +285,7 @@
                     <c:if test="${page.pageNum > 1}">
                         <li class="previous"><a href="${ctx}/index_list?pageNum=${page.pageNum-1}&&id=${user.id}">« 上一页</a></li>
                     </c:if>
-                    <c:forEach begin="1" end="${page.pages}" var="pn">
+                    <c:forEach begin="${page.startPage}" end="${page.endPage}" var="pn">
                         <c:if test="${page.pageNum==pn}">
                             <li class="active"><a href="javascript:void(0);">${pn}</a></li>
                         </c:if>
@@ -430,11 +435,9 @@
 </div>
 <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="${ctx}/css/bootstrap/js/bootstrap.min.js"></script>
-
 <script type="text/javascript" src="${ctx}/css/zui/js/zui.min.js"></script>
-
-
 <script type="text/javascript" src="${ctx}/css/reply/js/jquery.flexText.js"></script>
+<script type="text/javascript" src="${ctx}/css/zui/lib/kindeditor/kindeditor.min.js"></script>
 
 </body>
 <script language=javascript>
