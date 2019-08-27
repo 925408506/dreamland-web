@@ -38,7 +38,7 @@ public class UserContentServiceImpl implements UserContentService {
 
     @Override
     public List<UserContent> findAll() {
-        return userContentMapper.select( null );
+        return userContentMapper.findByJoin( null );
     }
 
     @Override

@@ -58,7 +58,7 @@
         .col-md-9{
             padding-bottom: 80px;
         }
-        .content-text{
+        .content-{text
             padding: 20px;
 
         }
@@ -169,12 +169,12 @@
             </ul>
         </div>
 
-        <form class="navbar-form navbar-right" role="search" style="margin-top: -35px;margin-right: 10px">
+        <form  method="post" action="${ctx}/index_list"  id="indexSearchForm"  class="navbar-form navbar-right" role="search" style="margin-top: -35px;margin-right: 10px">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" id="keyword" name="keyword" value="${keyword}" class="form-control" placeholder="搜索">
             </div>
             <!--<button type="submit" class="btn btn-default">Submit</button>-->
-            &nbsp; &nbsp;<i class="icon icon-search" style="color: white"></i>
+            &nbsp; &nbsp;<i onclick="searchForm();" class="icon icon-search" style="color: white"></i>
         </form>
 
     </nav>
@@ -276,21 +276,21 @@
 
 
 
-            <%--底部页面--%>
+            <%--底部页面   页面跳转选项--%>
             <div id="page-info" style="position: absolute;width:900px;background-color: #EBEBEB;height: 80px;left: 0px;">
                 <ul class="pager pager-loose">
                     <c:if test="${page.pageNum <= 1}">
                         <li><a href="javascript:void(0);">« 上一页</a></li>
                     </c:if>
                     <c:if test="${page.pageNum > 1}">
-                        <li class="previous"><a href="${ctx}/index_list?pageNum=${page.pageNum-1}&&id=${user.id}">« 上一页</a></li>
+                        <li class="previous"><a href="${ctx}/index_list?pageNum=${page.pageNum-1}&&keyword=${keyword}">« 上一页</a></li>
                     </c:if>
                     <c:forEach begin="${page.startPage}" end="${page.endPage}" var="pn">
                         <c:if test="${page.pageNum==pn}">
                             <li class="active"><a href="javascript:void(0);">${pn}</a></li>
                         </c:if>
                         <c:if test="${page.pageNum!=pn}">
-                            <li ><a href="${ctx}/index_list?pageNum=${pn}&&id=${user.id}">${pn}</a></li>
+                            <li ><a href="${ctx}/index_list?pageNum=${pn}&&keyword=${keyword}">${pn}</a></li>
                         </c:if>
                     </c:forEach>
 
@@ -298,7 +298,7 @@
                         <li><a href="javascript:void(0);">下一页 »</a></li>
                     </c:if>
                     <c:if test="${page.pageNum<page.pages}">
-                        <li><a href="${ctx}/index_list?pageNum=${page.pageNum+1}&&id=${user.id}">下一页 »</a></li>
+                        <li><a href="${ctx}/index_list?pageNum=${page.pageNum+1}&&keyword=${keyword}">下一页 »</a></li>
                     </c:if>
 
                 </ul>
@@ -760,6 +760,15 @@
                     }
                 }
             });
+        }
+    }
+
+    //搜索
+    function searchForm(){
+        var keyword = $("#keyword").val();
+        if(keyword != null && keyword.trim() != "")
+        {
+            $("#indexSearchForm").submit();
         }
     }
 </script>

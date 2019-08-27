@@ -23,9 +23,9 @@ public class UserContent {
     private String personal;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date rptTime;
-
+    @Transient
     private String imgUrl;
-
+    @Transient
     private String nickName;
 
     private Integer upvote;

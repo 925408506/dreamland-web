@@ -47,6 +47,9 @@ public class PersonalController extends BaseController {
     @Autowired// redis数据库操作模板
     private RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    private SolrService solrService;
+
     /**
      * 初始化个人主页数据
      * @param model
@@ -185,6 +188,7 @@ public class PersonalController extends BaseController {
         commentService.deleteByContentId(cid);
         upvoteService.deleteByContentId(cid);
         userContentService.deleteById(cid);
+        solrService.deleteById(cid);
         return "redirect:/list?manage=manage";
     }
 

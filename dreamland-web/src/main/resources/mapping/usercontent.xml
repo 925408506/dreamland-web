@@ -6,7 +6,7 @@
 
   <select id="findCategoryByUid"  resultMap="categoryMap">
         select category,count(1) as num from user_content where u_id = #{uid} and personal = '0' group by category order by num desc
-    </select>
+  </select>
 
   <resultMap type="wang.dreamland.www.entity.UserContent" id="categoryMap">
     <!-- property 表示wang.dreamland.www.entity.UserContent； column 表示表中的列名 -->

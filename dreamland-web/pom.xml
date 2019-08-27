@@ -68,7 +68,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <!-- 指定范围，在测试时才会加载 -->
             <scope>test</scope>
         </dependency>
@@ -364,6 +364,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.58</version>
+        </dependency>
+        <!--solr的依赖包-->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>7.3.0</version>
         </dependency>
 
     </dependencies>
