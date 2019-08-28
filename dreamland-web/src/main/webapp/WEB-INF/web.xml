@@ -9,9 +9,11 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>
         classpath*:spring-mybatis.xml,
-        classpath*:applicationContext-redis.xml
-        classpath*:applicationContext-activemq.xml
-        classpath*:applicationContext-solr.xml
+        classpath*:applicationContext-redis.xml,
+        classpath*:applicationContext-activemq.xml,
+        classpath*:applicationContext-solr.xml,
+        classpath*:spring-security.xml
+
     </param-value>
   </context-param>
 
@@ -107,5 +109,13 @@
     <filter-name>dispatcherDemoFilter</filter-name>
     <url-pattern>/index.jsp</url-pattern>
   </filter-mapping>
-
+  <!--Spring Security权限过滤器链-->
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 </web-app>

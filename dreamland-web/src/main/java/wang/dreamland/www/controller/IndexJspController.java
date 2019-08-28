@@ -51,10 +51,8 @@ public class IndexJspController extends BaseController {
                               @RequestParam(value = "pageSize",required = false) Integer pageSize) {
 
          log.info( "===========进入index_list=========" );
-        User user = (User)getSession().getAttribute("user");
-        if(user!=null){
-            model.addAttribute( "user",user );
-        }
+        User user = getCurrentUser();
+        model.addAttribute("user",user);
         if(StringUtils.isNotBlank(keyword))
         {
             Page<UserContent> page = solrService.findByKeyWords(keyword, pageNum, pageSize);
@@ -83,12 +81,7 @@ public class IndexJspController extends BaseController {
                                      @RequestParam(value = "upvote",required = false) int upvote) {
         log.info( "id="+id+",uid="+uid+"upvote="+upvote );
         Map map = new HashMap<String,Object>();
-        User user = (User)getSession().getAttribute("user");
-
-        if(user == null){
-            map.put( "data","fail" );
-            return map;
-        }
+        User user =getCurrentUser();
         Upvote up = new Upvote();
         up.setContentId( id );
         up.setuId( user.getId() );
@@ -190,11 +183,7 @@ public class IndexJspController extends BaseController {
                                       @RequestParam(value = "comment_time",required = false) Date comment_time,
                                       @RequestParam(value = "upvote",required = false) Integer upvote) {
         Map map = new HashMap<String,Object>();
-        User user = (User)getSession().getAttribute("user");
-        if(user == null){
-            map.put( "data","fail" );
-            return map;
-        }
+        User user = getCurrentUser();
         if(id==null ){
 
             Comment comment = new Comment();
@@ -238,50 +227,47 @@ public class IndexJspController extends BaseController {
                                             @RequestParam(value = "fid",required = false) Long fid)
     {
         int num = 0;
-        Map map = new HashMap<String,Object>();
-        User user = (User) getSession().getAttribute("user");
-        if(user==null){
-            map.put( "data","fail" );
-        }else{
-            if(user.getId().equals( uid )){
-                Comment comment = commentService.findById( id );
-                if(StringUtils.isBlank( comment.getChildren() )){
-                    if(fid!=null){
-                        //去除id
-                        Comment fcomm = commentService.findById( fid );
-                        //去除掉要删除的id
-                        String child = StringUtil.getString( fcomm.getChildren(), id );
-                        fcomm.setChildren( child );
-                        commentService.update( fcomm );
-                    }
-                    commentService.deleteById(id);
-                    num = num + 1;
-                }else {
-                    String children = comment.getChildren();
-                    commentService.deleteChildrenComment(children);
-                    String[] arr = children.split( "," );
-
-                    commentService.deleteById( id );
-
-                    num = num + arr.length + 1;
-
+        Map map = new HashMap <String, Object>();
+        User user = getCurrentUser();
+        if (user.getId().equals(uid)) {
+            Comment comment = commentService.findById(id);
+            if (StringUtils.isBlank(comment.getChildren())) {
+                if (fid != null) {
+                    //去除id
+                    Comment fcomm = commentService.findById(fid);
+                    //去除掉要删除的id
+                    String child = StringUtil.getString(fcomm.getChildren(), id);
+                    fcomm.setChildren(child);
+                    commentService.update(fcomm);
                 }
-                UserContent userContent = userContentService.findById( con_id );
-                if(userContent!=null){
-                    if(userContent.getCommentNum() - num >= 0){
-                        userContent.setCommentNum( userContent.getCommentNum() - num );
-                    }else {
-                        userContent.setCommentNum( 0 );
-                    }
+                commentService.deleteById(id);
+                num = num + 1;
+            } else {
+                String children = comment.getChildren();
+                commentService.deleteChildrenComment(children);
+                String[] arr = children.split(",");
 
-                    userContentService.updateById( userContent );
-                }
-                map.put( "data",userContent.getCommentNum() );
-            }else {
-                map.put( "data","no-access" );
+                commentService.deleteById(id);
+
+                num = num + arr.length + 1;
+
             }
+            UserContent userContent = userContentService.findById(con_id);
+            if (userContent != null) {
+                if (userContent.getCommentNum() - num >= 0) {
+                    userContent.setCommentNum(userContent.getCommentNum() - num);
+                } else {
+                    userContent.setCommentNum(0);
+                }
+
+                userContentService.updateById(userContent);
+            }
+            map.put("data", userContent.getCommentNum());
+        } else {
+            map.put("data", "no-access");
         }
-        return  map;
+
+        return map;
     }
 
     @RequestMapping("/comment_child")
@@ -294,12 +280,7 @@ public class IndexJspController extends BaseController {
                                               @RequestParam(value = "comment_time",required = false) Date comment_time,
                                               @RequestParam(value = "upvote",required = false) Integer upvote) {
         Map map = new HashMap<String,Object>(  );
-        User user = (User)getSession().getAttribute("user");
-        if(user == null){
-            map.put( "data","fail" );
-            return map;
-        }
-
+        User user = getCurrentUser();
         Comment comment = new Comment();
         comment.setComContent( oSize );
         comment.setCommTime( comment_time );

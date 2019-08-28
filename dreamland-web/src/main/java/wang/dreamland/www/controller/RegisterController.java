@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -154,8 +155,8 @@ public class RegisterController {
         } else {
             user = new User();
             user.setNickName(nickname);
-
-            user.setPassword(MD5Util.encodeToHex("salt"+password));
+            password = new Md5PasswordEncoder().encodePassword(password, email);
+            user.setPassword(password);
             user.setPhone(phone);
             user.setEmail(email);
             user.setState("0");

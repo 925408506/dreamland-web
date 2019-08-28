@@ -1,12 +1,20 @@
 package wang.dreamland.www.entity;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import wang.dreamland.www.common.StringUtil;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,10 +59,6 @@ public class User {
         this.email = email == null ? null : email.trim();
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
     }
@@ -97,5 +101,79 @@ public class User {
 
     public void setEnable(String enable) {
         this.enable = enable == null ? null : enable.trim();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (roles == null || roles.size() <= 0)
+        {
+            return null;
+        }
+        List<SimpleGrantedAuthority> authorities = new ArrayList <SimpleGrantedAuthority>();
+        for(Role role : roles)
+        {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleValue()));
+        }
+        return  authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        if(StringUtils.isNotBlank(state) && "1".equals(state) && StringUtils.isNotBlank(enable) && "1".equals(enable))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            return getEmail().equals(((User)obj).getEmail())||getUsername().equals(((User)obj).getUsername());
+        }
+        return false;
+    }
+    @Override
+    public int hashCode() {
+        return getUsername().hashCode();
+    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", state='" + state + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", enable='" + enable + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

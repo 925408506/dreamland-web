@@ -296,13 +296,13 @@
                 <span class="icon-bar"></span>
             </button>
             <!-- 品牌名称或logo -->
-            <a class="navbar-brand" href="javascript:void(0);">个人空间</a>
+            <a class="navbar-brand active" href="javascript:void(0);">个人空间</a>
         </div>
         <!-- 导航项目 -->
         <div class="collapse navbar-collapse navbar-collapse-example">
             <!-- 一般导航项目 -->
             <ul class="nav navbar-nav">
-                <li class="active"><a href="${ctx}/list">我的梦</a></li>
+                <li ><a href="${ctx}/list">我的梦</a></li>
                 <li><a href="${ctx}/index_list">首页</a></li>
 
                 <!-- 导航中的下拉菜单 -->

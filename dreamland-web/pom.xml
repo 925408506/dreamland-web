@@ -371,7 +371,12 @@
             <artifactId>solr-solrj</artifactId>
             <version>7.3.0</version>
         </dependency>
-
+        <!--qq-->
+        <dependency>
+            <groupId>wang.dreamland.www</groupId>
+            <artifactId>Sdk4J</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

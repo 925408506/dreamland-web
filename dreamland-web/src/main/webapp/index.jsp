@@ -58,7 +58,7 @@
         .col-md-9{
             padding-bottom: 80px;
         }
-        .content-{text
+        .content-text{
             padding: 20px;
 
         }
@@ -212,12 +212,13 @@
                         <div class="stats">
                             <!-- 笑脸、评论数等 -->
                             <span class="stats-vote"><i id="${cont.id}" class="number">${cont.upvote}</i> 赞</span>
+                            <span class="dash"> · </span>
+                            <span class="stats-vote"><i id="${cont.id}" class="number">${cont.downvote}</i> 踩</span>
                             <span class="stats-comments">
-                    <span class="dash"> · </span>
-                         <a  onclick="reply(${cont.id},${cont.uId});">
+                            <a onclick="reply(${cont.id},${cont.uId});">
                               <i class="number" id="comment_num_${cont.id}">${cont.commentNum}</i> 评论
-                          </a>
-                    </span>
+                            </a>
+                            </span>
                         </div>
                         <div style="height: 5px"></div>
                         <div class="stats-buttons bar clearfix">
@@ -452,7 +453,11 @@
     }
     //点赞或踩
     function upvote_click(id,cont) {
-
+        var uid = "${user.id}";
+        if(uid==''||uid==null){
+            window.location.href = "/login.jsp";
+            return
+        }
         $.ajax({
             type:'post',
             url:'/upvote',

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,7 +108,7 @@ public class LoginController extends BaseController {
             model.addAttribute("error", "fail");
             return "../login";
         }
-        password = MD5Util.encodeToHex(Constants.SALT + password);
+        password = new Md5PasswordEncoder().encodePassword(password, email);
         User user = userService.login(email, password);
         if (user != null) {
             if ("0".equals(user.getState())) {

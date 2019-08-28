@@ -6,6 +6,8 @@ import wang.dreamland.www.dao.RoleMapper;
 import wang.dreamland.www.entity.Role;
 import wang.dreamland.www.service.RoleService;
 
+import java.util.List;
+
 /**
  * Created by wly on 2017/12/15.
  */
@@ -24,5 +26,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public int add(Role role) {
         return roleMapper.insert(role);
+    }
+
+    @Override
+    public List<Role> findByUid(Long uid) {
+        return roleMapper.findByUid(uid);
     }
 }

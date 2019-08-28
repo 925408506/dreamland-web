@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -63,16 +64,12 @@ public class PersonalController extends BaseController {
                            @RequestParam(value = "pageNum",required = false) Integer pageNum ,
                            @RequestParam(value = "pageSize",required = false) Integer pageSize,
                            @RequestParam(value = "manage",required = false) String manage ) {
-        User user = (User)getSession().getAttribute("user");
+        User user = getCurrentUser();
         UserContent content = new UserContent();
         UserContent uc = new UserContent();
-        if(user!=null){
             model.addAttribute( "user",user );
             content.setuId( user.getId() );
             uc.setuId(user.getId());
-        }else{
-            return "../login";
-        }
         if(StringUtils.isNotBlank(manage)){
             model.addAttribute("manage",manage);
         }
@@ -113,11 +110,7 @@ public class PersonalController extends BaseController {
                                              @RequestParam(value = "pageSize",required = false) Integer pageSize) {
 
         Map map = new HashMap<String,Object>(  );
-        User user = (User)getSession().getAttribute("user");
-        if(user==null) {
-            map.put("pageCate","fail");
-            return map;
-        }
+        User user = getCurrentUser();
         //默认每页显示4条数据
         pageSize = 4;
         PageHelper.Page<UserContent> pageCate = userContentService.findByCategory(category,user.getId(),pageNum,pageSize);
@@ -136,11 +129,7 @@ public class PersonalController extends BaseController {
     public Map<String,Object> findPersonal(Model model,@RequestParam(value = "pageNum",required = false) Integer pageNum , @RequestParam(value = "pageSize",required = false) Integer pageSize) {
 
         Map map = new HashMap<String,Object>(  );
-        User user = (User)getSession().getAttribute("user");
-        if(user==null) {
-            map.put("page2","fail");
-            return map;
-        }
+        User user = getCurrentUser();
         pageSize = 4; //默认每页显示4条数据
         PageHelper.Page<UserContent> page = userContentService.findPersonal(user.getId(),pageNum,pageSize);
         map.put("page2",page);
@@ -159,11 +148,7 @@ public class PersonalController extends BaseController {
     public Map<String,Object> findAllHotContents(Model model, @RequestParam(value = "pageNum",required = false) Integer pageNum , @RequestParam(value = "pageSize",required = false) Integer pageSize) {
 
         Map map = new HashMap<String,Object>(  );
-        User user = (User)getSession().getAttribute("user");
-        if(user==null) {
-            map.put("hotPage","fail");
-            return map;
-        }
+        User user = getCurrentUser();
         pageSize = 4; //默认每页显示4条数据
         UserContent uct = new UserContent();
         uct.setPersonal("0");
@@ -181,10 +166,7 @@ public class PersonalController extends BaseController {
     @RequestMapping("/deleteContent")
     public String deleteContent(Model model, @RequestParam(value = "cid",required = false) Long cid) {
 
-        User user = (User)getSession().getAttribute("user");
-        if(user==null) {
-            return "../login";
-        }
+        User user = getCurrentUser();
         commentService.deleteByContentId(cid);
         upvoteService.deleteByContentId(cid);
         userContentService.deleteById(cid);
@@ -199,11 +181,7 @@ public class PersonalController extends BaseController {
      */
     @RequestMapping("/profile")
     public String profile(Model model){
-        User user = (User)getSession().getAttribute("user");
-        if(user == null)
-        {
-            return "../login";
-        }
+        User user = getCurrentUser();
         UserInfo userInfo = userInfoService.findByUid(user.getId());
         model.addAttribute("user",user);
         model.addAttribute("userInfo",userInfo);
@@ -221,7 +199,7 @@ public class PersonalController extends BaseController {
     @ResponseBody
     public Map<String,Object> saveImage(Model model,@RequestParam(value ="url")String url ){
         Map map = new HashMap<String ,Object>();
-        User user = (User)getSession().getAttribute("user");
+        User user = getCurrentUser();
         user.setImgUrl(url);
         userService.update(user);
         map.put("msg","success");
@@ -244,10 +222,7 @@ public class PersonalController extends BaseController {
                                @RequestParam(value = "sex",required = false) String sex,
                                @RequestParam(value = "address",required = false) String address,
                                @RequestParam(value = "birthday",required = false) String birthday){
-        User user = (User) getSession().getAttribute("user");
-        if(user==null){
-            return "../login";
-        }
+        User user = getCurrentUser();
         UserInfo userInfo = userInfoService.findByUid(user.getId());
         boolean flag = false;
         if(userInfo == null){
@@ -281,14 +256,12 @@ public class PersonalController extends BaseController {
      * @return
      */
     @RequestMapping("/rephone")
-    public String rephone(Model model){
-        User user = (User) getSession().getAttribute("user");
-        if(user != null)
-        {
-            model.addAttribute("user",user);
-            return "personal/rephone";
-        }
-        return "../login";
+    public String rephone(Model model) {
+        User user = getCurrentUser();
+
+        model.addAttribute("user", user);
+        return "personal/rephone";
+
     }
 
       /** 跳转至重置密码页面
@@ -296,33 +269,29 @@ public class PersonalController extends BaseController {
      * @return
              */
     @RequestMapping("/repassword")
-    public String repassword(Model model){
-        User user = (User) getSession().getAttribute("user");
-        if(user != null)
-        {
-            model.addAttribute("user",user);
-            return "personal/repassword";
-        }
-        return "../login";
+    public String repassword(Model model) {
+        User user = getCurrentUser();
+        model.addAttribute("user", user);
+        return "personal/repassword";
+
     }
 
     @RequestMapping("/updatePassword")
     public String updatePassword(Model model, @RequestParam(value = "old_password",required = false) String oldPassword,
                                  @RequestParam(value = "password",required = false) String password){
 
-        User user = (User) getSession().getAttribute("user");
-        if(user!=null) {
-            oldPassword = MD5Util.encodeToHex(Constants.SALT + oldPassword);
-            if (user.getPassword().equals(oldPassword)) {
-                password = MD5Util.encodeToHex(Constants.SALT + password);
-                user.setPassword(password);
-                userService.update(user);
-                model.addAttribute("message", "success");
-            } else {
-                model.addAttribute("message", "fail");
-            }
+        User user = getCurrentUser();
+        oldPassword = new Md5PasswordEncoder().encodePassword(oldPassword, user.getEmail());
+
+        if (user.getPassword().equals(oldPassword)) {
+            password = new Md5PasswordEncoder().encodePassword(password, user.getEmail());
+            user.setPassword(password);
+            userService.update(user);
+            model.addAttribute("message", "success");
+        } else {
+            model.addAttribute("message", "fail");
         }
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         return "personal/passwordSuccess";
     }
 
@@ -331,20 +300,19 @@ public class PersonalController extends BaseController {
                               @RequestParam(value = "phone", required = false) String phone,
                               @RequestParam(value = "code", required = false) String code) {
         log.info("---------------修改手机号码-----------------");
-        User user = (User) getSession().getAttribute("user");
-        if (user != null) {
-            String codeInDB = redisTemplate.opsForValue().get(phone);
-            password = MD5Util.encodeToHex(Constants.SALT + password);
-            if (user.getPassword().equals(password) && codeInDB.equals(code)) {
-                //验证短信
-                user.setPhone(phone);
-                userService.update(user);
-                model.addAttribute("message", "success");
-            } else {
-                model.addAttribute("message", "fail");
-            }
+        User user = getCurrentUser();
+        String codeInDB = redisTemplate.opsForValue().get(phone);
+        password = MD5Util.encodeToHex(Constants.SALT + password);
+        if (user.getPassword().equals(password) && codeInDB.equals(code)) {
+            //验证短信
+            user.setPhone(phone);
+            userService.update(user);
+            model.addAttribute("message", "success");
+        } else {
+            model.addAttribute("message", "fail");
         }
-        model.addAttribute("operate","1");
+
+        model.addAttribute("operate", "1");
         model.addAttribute("user", user);
         return "personal/profile";
     }
