@@ -41,7 +41,7 @@
         <spring.data.redis.version>1.7.1.RELEASE</spring.data.redis.version>
 
         <!--json 版本号-->
-        <json.version>2.8.5</json.version>
+        <json.version>2.10.0</json.version>
     </properties>
 
     <dependencies>
